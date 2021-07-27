@@ -4,9 +4,8 @@
 
       PROG = main
       OBJS = mapa.o \
-	  		 utils.o
-            #  lib_lu.o \
-			#  lib_sTri.o \
+	  		 utils.o \
+             filaPrioridade.o
 			 
 
 .PHONY: limpa faxina clean purge all

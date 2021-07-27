@@ -38,3 +38,11 @@ void printMapa(int **mapa, int linhas, int colunas){
         printf("\n");
     }    
 }
+
+int *resolveMapa(int **mapa, int linhas, int colunas) {
+    
+    filaPrioridade *fila = alocaFila(mapa);
+
+    
+
+}
