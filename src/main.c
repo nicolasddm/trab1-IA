@@ -19,10 +19,10 @@ int main() {
             tempo = timestamp();
             
             // TODO - Adicionar algoritmo A*
-            int* solucao = resolveMapa(mapa, linhas, colunas);
+            int* solucao = resolveMapa(mapa, linhas, colunas, cores);
             
             tempo = timestamp() - tempo;
-            printf("Resolve Mapa Tempo: %lf ms", tempo);
+            printf("Resolve Mapa Tempo: %lf ms\n", tempo);
             
             // TODO - Adicionar estratégia de calcular h(n)
                 // quantos elementos faltam / número de cores restantes.

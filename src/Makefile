@@ -5,7 +5,9 @@
       PROG = main
       OBJS = mapa.o \
 	  		 utils.o \
-             filaPrioridade.o
+			 aEstrela.o \
+             filaPrioridade.o 
+			 
 			 
 
 .PHONY: limpa faxina clean purge all

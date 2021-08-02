@@ -1,21 +1,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct {
+typedef struct estado {
     int **mapa;
     int *jogadas;
     double valorHeuristica;
     double valorG;
-    int prioridade;
+    double valorF;
+    struct estado *prox;
+    struct estado *prev;
     
 } estado;
 
-typedef struct {
-    estado *topo;
-    estado *cauda;
-    
-} filaPrioridade;
+estado *alocaEstado(int** mapa, int jogadasTam);
 
-filaPrioridade *alocaFila(int **mapa);
+void addEstado(estado *newState, estado *state);
 
-estado *alocaEstado(int** mapa);
+void printEstados(estado *estados);
+
+void retiraEstado(estado *state);
