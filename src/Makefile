@@ -6,7 +6,8 @@
       OBJS = mapa.o \
 	  		 utils.o \
 			 aEstrela.o \
-             filaPrioridade.o 
+			 pilha.o \
+             filaPrioridade.o \
 			 
 			 
 

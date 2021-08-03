@@ -30,12 +30,24 @@ int *addJogada(int *jogadas, int cor, int tamJogadas) {
     int i = 0;
     for (i = 0; i < (tamJogadas); ++i) {
         novasJogadas[i] = jogadas[i];
-        printf("%d ", novasJogadas[i]);
+        printf("i: %d, jogadas[i]: %d, novasJogadas[i]: %d \n", i, jogadas[i], novasJogadas[i]);
     }
     novasJogadas[i] = cor;
-    printf("%d \n", novasJogadas[i]);
+    printf("i: %d, cor: %d, novasJogadas[i]: %d \n", i, cor, novasJogadas[i]);
+    printJogadas(novasJogadas, tamJogadas);
+    return novasJogadas;
+}
+
+void printJogadas(int* jogadas, int tamJogadas) {
+    printf("Print Jogadas: \n");
+    printf("tamJogadas: %d\n", tamJogadas);
+    for (int i = 0; i < (tamJogadas+1); ++i) {
+        printf("%d ", jogadas[i]);
+    }
+    printf("\n");
 }
 
 int temAdjacencia(estado* state, int cor) {
+    // Verificar se tem adjacencia
     return 1;
 }

@@ -12,7 +12,15 @@ typedef struct estado {
     
 } estado;
 
+typedef struct {
+    int linha;
+    int coluna;
+    
+} coordenada;
+
 estado *alocaEstado(int** mapa, int jogadasTam);
+
+coordenada *alocaCoordenada(int lin, int col);
 
 void addEstado(estado *newState, estado *state);
 
