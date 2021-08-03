@@ -28,23 +28,26 @@ void addEstado(estado *newState, estado *state) {
 void retiraEstado(estado *state) {
     printf("state: %lf\n", state->valorF);
     printf("GET PREV\n");
-    if (state->prev != NULL) {
-        estado *prevEstado = state->prev;
-        printf("prevEstado: %lf\n", prevEstado->valorF);
+    estado *prevEstado = state->prev;
+    printf("GET PROX\n");
+    estado *proxEstado = state->prox;
+    
+    if (prevEstado != NULL) {
+        printf("Ajusta ponteiros 1\n");
+        prevEstado->prox = proxEstado;
+        printf("prevEstado: %lf\n", prevEstado->valorF);   
     }
-    
 
-    
-    if (state->prox != NULL) {
-        estado *proxEstado = state->prox;
+    if (proxEstado != NULL) {
+        printf("Ajusta ponteiros 2\n");
+        proxEstado->prev = prevEstado;
         printf("proxEstado: %lf\n", proxEstado->valorF);
     }
     
-    
-
-    prevEstado->prox = proxEstado;
-    proxEstado->prev = prevEstado;
-    state->prev = state->prox = NULL;
+    printf("Ajusta ponteiros 3\n");
+    state->prev = NULL;
+    state->prox = NULL;
+    printf("free state\n");
     free(state);
 }
 

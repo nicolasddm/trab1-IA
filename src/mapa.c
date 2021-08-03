@@ -58,17 +58,19 @@ int *resolveMapa(int **mapa, int linhas, int colunas, int cores) {
     state->valorHeuristica = calculaHeuristica(mapa);
     state->valorF = calculaF(state);
     int i = 0;
-    while (i < 2) {
+    while (i < 7) {
         ++i;
         // Retirar o nó com menos f(n)
         estado* estadoMin = pegaMenorF(state);
 
         // Verificar se o nó está resolvido
+        printf("Verificar se o nó está resolvido\n");
         if (isSolved(estadoMin, linhas, colunas)) {
             return estadoMin->jogadas;
         };
         // Pegar a cor atual == mapa[0][0]
         int corAtual = estadoMin->mapa[0][0];
+        printf("Pegar a cor atual == mapa[0][0]: %d\n", corAtual);
         ++cont;
 
         // Itera por todas as cores // Colocar todos os nós filhos do nó na fila
@@ -76,25 +78,26 @@ int *resolveMapa(int **mapa, int linhas, int colunas, int cores) {
             // Se a cor for a msm não faz nada
             if (i != corAtual) {
                 // Se não tem vizinho com a cor não faz nada
+                printf("Se não tem vizinho com a cor não faz nada\n");
                 if (temAdjacencia(estadoMin, i)) {
-                    // printf("Tem Adjacencia \n");
+                    printf("Tem Adjacencia \n");
                     // Criar novo nó
                     estado* novoEstado = alocaEstado(estadoMin->mapa, cont);
-                    // printf("aloca Novo estado \n");
+                    printf("aloca Novo estado \n");
                     
                     // Adicionar ao nó result a cor selecionada
                     novoEstado->jogadas = addJogada(estadoMin->jogadas, i, cont);
-                    // printf("Adicionou jogadas \n");
+                    printf("Adicionou jogadas \n");
                     
                     // Gerar o mapa do novo nó com a nova cor
+                    printf("Gerar o mapa do novo nó com a nova cor\n");
                     novoEstado->mapa = pintaMapa(novoEstado, i);
-                    // printf("pinta mapa fake\n");
                     
                     // Calcula h(n), g(n) e f(n)
                     novoEstado->valorG = cont;
                     novoEstado->valorHeuristica = calculaHeuristica(novoEstado->mapa);
                     novoEstado->valorF = calculaF(novoEstado);
-                    // printf("Calcula valores \n");
+                    printf("Calcula valores \n");
     
                     // Adiciona nó na fila
                     addEstado(novoEstado, state); //PROBLEMA AQUI SOBRESCREVENDO
@@ -106,5 +109,7 @@ int *resolveMapa(int **mapa, int linhas, int colunas, int cores) {
         }
         retiraEstado(estadoMin);
     }
-
+    estado* estadoMin = pegaMenorF(state);
+    printJogadas(estadoMin->jogadas, cont);
+    return estadoMin->jogadas;
 }

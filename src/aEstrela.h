@@ -10,4 +10,6 @@ estado *pegaMenorF(estado *estados);
 
 int *addJogada(int *jogadas, int cor, int tamJogadas);
 
+void printJogadas(int* jogadas, int tamJogadas);
+
 int temAdjacencia(estado* state, int cor);
