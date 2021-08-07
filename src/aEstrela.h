@@ -12,4 +12,6 @@ int *addJogada(int *jogadas, int cor, int tamJogadas);
 
 void printJogadas(int* jogadas, int tamJogadas);
 
-int temAdjacencia(estado* state, int cor);
+int coordenadaValida(coordenada *coordProx, int linhas, int colunas);
+
+int temAdjacencia(estado* state, int cor, int linhas, int colunas);

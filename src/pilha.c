@@ -1,19 +1,29 @@
 #include "pilha.h"
 
-int push(coordenada** pilha, int tam, coordenada* coord) {
-    printf("entraPush %d\n", tam);
-    ++tam;
-    printf("add TAM %d\n", tam);
-    pilha[tam] = coord;
-    printf("atribui coordenada (%d, %d)\n", pilha[tam]->linha, pilha[tam]->coluna);
+int contemCoordenada(coordenada* coord, coordenada* coordAdicionadas, int tamCoords) {
+    for(int i = 0; i <= tamCoords; ++i){
+        if ((coordAdicionadas[i].linha == coord->linha) && (coordAdicionadas[i].coluna == coord->coluna)) {
+            printf("Já foi\n");
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int push(coordenada** pilha, int tam, coordenada* coord, coordenada* coordAdicionadas, int *tamCoords) {
+   
+    if (!contemCoordenada(coord, coordAdicionadas, *tamCoords)) {
+        ++tam;
+        pilha[tam] = coord;
+        *tamCoords += 1;
+        addCoordenada(coordAdicionadas, coord, *tamCoords);
+    }
+    return tam;
 }
 
 int pop(coordenada** pilha, int tam) {
-    printf("Retira coordenada do tam %d : %d\n", tam, tam > 0);
-    if (tam >= 0) {
-        free(pilha[tam]);
-        tam--;
-    }
+    tam--;
+    return tam;
 }
 
 coordenada *top(coordenada** pilha, int tam) {

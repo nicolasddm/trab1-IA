@@ -19,12 +19,17 @@ estado *alocaEstado(int **mapa, int jogadasTam) {
 
 coordenada *alocaCoordenada(int lin, int col) {
     coordenada *coords = (coordenada *) malloc(sizeof(coordenada));
-
+    coords->linha = 0;
+    coords->coluna = 0;
     coords->linha = lin;
     coords->coluna = col;
     printf("Aloca coordenada (%d, %d)\n", coords->linha, coords->coluna);
 
     return coords;
+}
+
+void addCoordenada(coordenada* arrCoords, coordenada* coord, int tamPilha){
+    arrCoords[tamPilha] = *coord;
 }
 
 void addEstado(estado *newState, estado *state) {
