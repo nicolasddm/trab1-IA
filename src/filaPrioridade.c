@@ -23,46 +23,84 @@ coordenada *alocaCoordenada(int lin, int col) {
     coords->coluna = 0;
     coords->linha = lin;
     coords->coluna = col;
-    printf("Aloca coordenada (%d, %d)\n", coords->linha, coords->coluna);
-
+    coords->prox = NULL;
+    coords->prev = NULL;
     return coords;
 }
 
-void addCoordenada(coordenada* arrCoords, coordenada* coord, int tamPilha){
-    arrCoords[tamPilha] = *coord;
+int contemCoordenada(coordenada* coord, coordenada* coordAdicionadas, int tamCoords) {
+    for(int i = 0; i <= tamCoords; ++i){
+        if ((coordAdicionadas[i].linha == coord->linha) && (coordAdicionadas[i].coluna == coord->coluna)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void addCoordenada(coordenada* arrCoords, coordenada* novaCoord, int tamCoords){
+    arrCoords[tamCoords] = *novaCoord;
+    // printf("AddCoordenada (%d, %d)\n", arrCoords[tamCoords].linha, arrCoords[tamCoords].coluna);
+}
+
+
+int addNextCoordenada(coordenada *novaCoord, coordenada *coord, coordenada* coordAdicionadas, int *tamCoords, int tamFila) {
+    if (!contemCoordenada(novaCoord, coordAdicionadas, *tamCoords)) {
+        novaCoord->prox = coord;
+        coord->prev = novaCoord;
+        novaCoord->prev = NULL;
+        *tamCoords += 1;
+        addCoordenada(coordAdicionadas, novaCoord, *tamCoords);
+        return 1;
+    }
+    return 0;
+}
+
+
+void retiraCoordenada(coordenada *coord) {
+    // printf("retira coordenada: (%d,%d)\n", coord->linha, coord->coluna);
+    // printf("GET PREV\n");
+    coordenada *prevCoord = coord->prev;
+    // printf("GET PROX\n");
+    coordenada *proxCoord = coord->prox;
+    
+    if (prevCoord != NULL) {
+        prevCoord->prox = proxCoord;
+    }
+
+    if (proxCoord != NULL) {
+        proxCoord->prev = prevCoord;
+    }
+    
+    coord->prev = NULL;
+    coord->prox = NULL;
+
+    free(coord);
 }
 
 void addEstado(estado *newState, estado *state) {
-    printf("state: %lf\n", state->valorF);
-    printf("newState: %lf\n", newState->valorF);
     newState->prox = state;
     state->prev = newState;
     newState->prev = NULL;
 }
 
 void retiraEstado(estado *state) {
-    printf("state: %lf\n", state->valorF);
-    printf("GET PREV\n");
+    // printf("state: %lf\n", state->valorF);
+    // printf("GET PREV\n");
     estado *prevEstado = state->prev;
-    printf("GET PROX\n");
+    // printf("GET PROX\n");
     estado *proxEstado = state->prox;
     
     if (prevEstado != NULL) {
-        printf("Ajusta ponteiros 1\n");
         prevEstado->prox = proxEstado;
-        printf("prevEstado: %lf\n", prevEstado->valorF);   
     }
 
     if (proxEstado != NULL) {
-        printf("Ajusta ponteiros 2\n");
         proxEstado->prev = prevEstado;
-        printf("proxEstado: %lf\n", proxEstado->valorF);
     }
     
-    printf("Ajusta ponteiros 3\n");
     state->prev = NULL;
     state->prox = NULL;
-    printf("free state\n");
+
     free(state);
 }
 
@@ -73,5 +111,15 @@ void printEstados(estado *estados) {
     }
     for (state = estados->prev; NULL != state; state = state->prev) {
         printf("Valor F do Estado: %lf \n", state->valorF);
+    }
+}
+
+void printCoordenadas(coordenada *coords) {
+    coordenada *coord;
+    for (coord = coords; NULL != coord; coord = coord->prox) {
+        // printf("Valor da Coordenada: (%d,%d) \n", coord->linha, coord->coluna);
+    }
+    for (coord = coords->prev; NULL != coord; coord = coord->prev) {
+        // printf("Valor da Coordenada: (%d,%d) \n", coord->linha, coord->coluna);
     }
 }

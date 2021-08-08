@@ -1,4 +1,4 @@
-    CC     = gcc -g -std=c11
+    CC     = gcc -g -std=c11 -O3
     CFLAGS = 
     LFLAGS = -lm
 

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "pilha.h"
 
-double calculaHeuristica(int **mapa);
+double calculaHeuristica(int **mapa, int cores, int linhas, int colunas);
 
 double calculaF(estado *state);
 

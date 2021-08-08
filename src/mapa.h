@@ -15,6 +15,8 @@ void printMapa(int **mapa, int linhas, int colunas);
 
 int isSolved(estado *state, int linhas, int colunas);
 
+void atribuiMapa(int **mapaOrigem, int **mapaDestino, int linhas, int colunas);
+
 int **pintaMapa(estado *state, int cor, int linhas, int colunas);
 
 int *resolveMapa(int **mapa, int linhas, int colunas, int cores);

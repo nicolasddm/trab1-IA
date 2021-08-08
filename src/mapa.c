@@ -40,7 +40,7 @@ void printMapa(int **mapa, int linhas, int colunas){
 }
 
 int isSolved(estado *state, int linhas, int colunas) {
-    printf("Verifica se o nó está resolvido\n");
+    // printf("Verifica se o nó está resolvido\n");
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
             if (state->mapa[i][j] != state->mapa[0][0])
@@ -50,12 +50,27 @@ int isSolved(estado *state, int linhas, int colunas) {
     return 1;
 }
 
+void atribuiMapa(int **mapaOrigem, int **mapaDestino, int linhas, int colunas) {
+    for (int i = 0; i < linhas; i++)
+        for (int j = 0; j < colunas; j++)
+            mapaDestino[i][j] = mapaOrigem[i][j];
+}
+
+void printCoordenadasMapa(coordenada *coordAdicionadas, int tamCoords) {
+    printf("Coordenadas já adicionadas: \n");
+    for (int i = 0; i < tamCoords; i++) {
+        printf("(%d, %d) ", coordAdicionadas[tamCoords].linha, coordAdicionadas[tamCoords].coluna);
+    }
+    printf("\n");
+}
+
 
 int **pintaMapa(estado *state, int cor, int linhas, int colunas) {
-    printf("######################### PINTA MAPA ##########################\n");
-    int **mapa = state->mapa;
+    // printf("######################### PINTA MAPA ##########################\n");
+    state->mapa;
+    int **mapa = alocaMapa(linhas, colunas);
+    atribuiMapa(state->mapa, mapa, linhas, colunas);
     int corAnterior = mapa[0][0];
-    printf("cor atual %d\n", corAnterior);
     
     int dx[4] = {0,-1,0,1};
     int dy[4] = {1,0,-1,0};
@@ -66,7 +81,7 @@ int **pintaMapa(estado *state, int cor, int linhas, int colunas) {
     int tamPilha = 0;
     pilha[0] = coord;
 
-    coordenada *coordAdicionadas = (coordenada *) malloc(sizeof(coordenada) * linhas * colunas);
+    coordenada *coordAdicionadas = malloc(sizeof(coordenada) * linhas * colunas);
     int tamCoords = 0;
     coordAdicionadas[0] = *coord;
 
@@ -83,18 +98,18 @@ int **pintaMapa(estado *state, int cor, int linhas, int colunas) {
             }
         }
     }
-    printMapa(mapa, linhas, colunas);
-    
+    // printMapa(mapa, linhas, colunas);
     return mapa;
 }
 
 int *resolveMapa(int **mapa, int linhas, int colunas, int cores) {
     double cont = 0;
     estado *state = alocaEstado(mapa, cont);
-    state->valorHeuristica = calculaHeuristica(mapa);
+    state->valorHeuristica = calculaHeuristica(mapa, cores, linhas, colunas);
     state->valorF = calculaF(state);
+    printf("H(n): %lf, g(n): %lf\n", state->valorHeuristica, state->valorF);
     int i = 0;
-    while (i < 75) {
+    while (i < 800) {
         ++i;
         // Retirar o nó com menos f(n)
         estado* estadoMin = pegaMenorF(state);
@@ -102,26 +117,20 @@ int *resolveMapa(int **mapa, int linhas, int colunas, int cores) {
         // Verificar se o nó está resolvido
         if (isSolved(estadoMin, linhas, colunas)) {
             printMapa(estadoMin->mapa, linhas, colunas);
+            printJogadas(estadoMin->jogadas, cont);
+
             return estadoMin->jogadas;
         };
-        printf("Não está resolvido\n");
         // Pegar a cor atual == mapa[0][0]
         int corAtual = estadoMin->mapa[0][0];
-        printf("Pegar a cor atual == mapa[0][0]: %d\n", corAtual);
         ++cont;
 
         // Itera por todas as cores // Colocar todos os nós filhos do nó na fila
-        printf("Itera pelas cores\n");
         for (int cor = 1; cor <= cores; cor++) {
             // Se a cor for a msm não faz nada
-            printf("cor: %d, corAtual: %d\n", cor, corAtual);
             if (cor != corAtual) {
                 // Se não tem vizinho com a cor não faz nada
-                printf("Verifica se tem Adjacencia, linhas: %d, colunas: %d\n", linhas, colunas);
-                printMapa(estadoMin->mapa, linhas, colunas);
-                printf("Pirntou estadoMin\n");
                 if (temAdjacencia(estadoMin, cor, linhas, colunas)) {
-                    printf("Tem Adjacencia \n");
                     // Criar novo nó
                     estado* novoEstado = alocaEstado(estadoMin->mapa, cont);
                     
@@ -129,20 +138,18 @@ int *resolveMapa(int **mapa, int linhas, int colunas, int cores) {
                     novoEstado->jogadas = addJogada(estadoMin->jogadas, cor, cont);
                     
                     // Gerar o mapa do novo nó com a nova cor
-                    printf("Gerar o mapa do novo nó com a nova cor\n");
-                    novoEstado->mapa = pintaMapa(novoEstado, cor, linhas, colunas);
+                    novoEstado->mapa = pintaMapa(estadoMin, cor, linhas, colunas);
                     
                     // Calcula h(n), g(n) e f(n)
-                    novoEstado->valorG = cont;
-                    novoEstado->valorHeuristica = calculaHeuristica(novoEstado->mapa);
+                    novoEstado->valorG = 0;
+                    novoEstado->valorHeuristica = calculaHeuristica(novoEstado->mapa, cores, linhas, colunas);
                     novoEstado->valorF = calculaF(novoEstado);
-                    printf("Calcula valores \n");
+                    printf("H(n): %lf, g(n): %lf\n", novoEstado->valorHeuristica, novoEstado->valorF);
     
                     // Adiciona nó na fila
                     addEstado(novoEstado, state);
-                    printf("Adiciona novo estado \n");
                     state = novoEstado;
-                    printEstados(novoEstado);
+                    // printEstados(novoEstado);
                 }
             }
         }
